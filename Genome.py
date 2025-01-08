@@ -2,15 +2,20 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class Genome:
 
     def __init__(self, genome_size):
+        self.genome_size = genome_size
         self.genome = self.initialize_genome(genome_size)
+
+    def __repr__(self):
+        return f'Genome({self.genome})'
 
     def initialize_genome(self, genome_size):
         return np.random.randint(low=0, high=2, size=(1, genome_size), dtype=np.int8)
 
-    def get_image_score(self, image: np.ndarray):
+    def get_image_score(self, image: np.ndarray) -> int:
         height, width = image.shape[:2]
         genome_copy = self.genome
         genome_copy.resize((height, width))
@@ -32,12 +37,6 @@ class Generation:
         population = []
         for _ in range(self.population_size):
             population.append(Genome())
-
-
-
-
-    def cross(another_genome):
-        pass
 
 
 if __name__ == '__main__':
