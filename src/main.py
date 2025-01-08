@@ -2,7 +2,18 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Genome import Genome
+from Generation import Generation
+
+# Guardar gráfico de evolución de la puntuación
+def save_score_plot(epochs: int):
+    n = [x for x in range(epochs)]
+    plt.plot(n, historic_scores)
+    plt.grid()
+    plt.title('Histórico de puntuaciones')
+    plt.xlabel('Nº Generación')
+    plt.ylabel('Píxeles en común con la imagen original')
+    plt.savefig('historic_score.png')
+    plt.close()
 
 # Leer tamaño de imagen de entrada
 image_path = 'images\output.jpg'
@@ -17,40 +28,23 @@ height, width = image.shape
 # Generar una población de soluciones
 genome_size = height * width
 population_size = 100
-population = []
-for i in range(population_size):
-    genome = Genome(genome_size=genome_size)
-    population.append(genome)
-print('Población de soluciones:', population)
+generation = Generation(
+    population_size=population_size,
+    genome_size=genome_size,
+)
+print(generation)
 
-# Medir la puntuación de cada solución
-scores = []
-for genome in population:
-    score = genome.get_image_score(image)
-    scores.append(score)
-print('Scores:', scores)
+# Ejecutar algoritmo genético
+NUM_GENERACIONES = 150
+MUTATION_RATE = .01
+historic_scores = []
+for i in range(NUM_GENERACIONES):
+    generation.set_population_score(image=image)
+    generation.set_best_genomes()
+    generation.represent_best_genome(image=image, show=False, save=True)
 
-# Ordenar la población para obtener los dos mejores genomas
-population_scores = zip(population, scores)
-population_scores = sorted(population_scores, key=lambda item: -item[1])
-best_items = population_scores[:2]
-print('Dos mejores genomas:', best_items)
-
-# Cruzar esos dos genomas para crear una nueva generación
-population = []
-for i in range(population_size):
-    genome = best_items[0][0].reproduce(best_items[1][0])
-    population.append(genome)
-print('Generación nueva:', population)
-
-# Medir la puntuación de cada solución
-scores = []
-for genome in population:
-    score = genome.get_image_score(image)
-    scores.append(score)
-print('Scores:', scores)
+    historic_scores.append(generation.best_scores[0])
+    save_score_plot(epochs=i+1)
+    generation = generation.new_generation(mutation_rate=MUTATION_RATE)
 
 
-# # Mostrar genoma
-# plt.imshow(genome, cmap='gray')
-# plt.show()
