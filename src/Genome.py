@@ -25,7 +25,8 @@ class Genome:
         genome_copy = self.genome.astype(np.int8).copy()
         genome_copy.resize((height, width))
         common_pixels = cv2.bitwise_and(genome_copy, image)
-        return np.count_nonzero(common_pixels)
+        different_pixels = cv2.bitwise_and(genome_copy, cv2.bitwise_not(image))
+        return np.count_nonzero(common_pixels) - np.count_nonzero(different_pixels)
     
     def reproduce(self, another_genome: "Genome", mutation_rate: float = .1) -> "Genome":
         child_genome = []
