@@ -1,6 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 from Genome import Genome
 
@@ -66,7 +67,8 @@ class Generation:
             self, 
             image: np.ndarray = None,
             show: bool = True,
-            save: bool = False
+            save: bool = False,
+            save_dir: str = ''
         ):
         height, width = image.shape[:2]
         best_genome = self.best_genomes[0].genome.astype(np.int8).copy()
@@ -79,4 +81,6 @@ class Generation:
             plt.title(f'Número de píxeles coincidentes: {self.best_scores[0]}')
             plt.show()
         if save:
-            cv2.imwrite(f'best_generation_{self.generation_number}.png', best_genome.astype(np.int32)*255)
+            save_name = f'best_generation_{self.generation_number}.png'
+            save_path = os.path.join(save_dir, save_name)
+            cv2.imwrite(save_path, best_genome.astype(np.int32)*255)
