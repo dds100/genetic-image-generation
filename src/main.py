@@ -12,7 +12,7 @@ def save_score_plot(epochs: int):
     plt.title('Histórico de puntuaciones')
     plt.xlabel('Nº Generación')
     plt.ylabel('Píxeles en común con la imagen original')
-    plt.savefig('historic_score.png')
+    plt.savefig('runs\historic_score.png')
     plt.close()
 
 # Leer tamaño de imagen de entrada
@@ -42,7 +42,7 @@ historic_scores = []
 for i in range(NUM_GENERACIONES):
     generation.set_population_score(image=image)
     generation.set_best_genomes()
-    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=True)
+    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=True, save_dir='runs')
 
     historic_scores.append(generation.best_scores[0])
     save_score_plot(epochs=i+1)
