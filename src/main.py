@@ -16,7 +16,7 @@ def save_score_plot(epochs: int):
     plt.close()
 
 # Leer tamaño de imagen de entrada
-image_path = 'images\output_36x36.jpg'
+image_path = 'images\output_30x34.jpg'
 image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
 # Convertir a binaria para poder hacer operaciones lógicas
@@ -35,14 +35,14 @@ generation = Generation(
 print(generation)
 
 # Ejecutar algoritmo genético
-NUM_GENERACIONES = 1000
+NUM_GENERACIONES = 301
 initial_mutation_rate = 0.01
 max_score = genome_size
 historic_scores = []
 for i in range(NUM_GENERACIONES):
     generation.set_population_score(image=image)
     generation.set_best_genomes()
-    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=True, save_dir='runs')
+    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=False, save_dir='runs')
 
     historic_scores.append(generation.best_scores[0])
     save_score_plot(epochs=i+1)
