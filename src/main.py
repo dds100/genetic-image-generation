@@ -3,17 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from Generation import Generation
+from utils import save_score_plot, create_runs_dir
 
-# Guardar gráfico de evolución de la puntuación
-def save_score_plot(epochs: int):
-    n = [x for x in range(epochs)]
-    plt.plot(n, historic_scores)
-    plt.grid()
-    plt.title('Histórico de puntuaciones')
-    plt.xlabel('Nº Generación')
-    plt.ylabel('Píxeles en común con la imagen original')
-    plt.savefig('runs\historic_score.png')
-    plt.close()
 
 # Leer tamaño de imagen de entrada
 image_path = 'images\output_30x34.jpg'
@@ -34,6 +25,9 @@ generation = Generation(
 )
 print(generation)
 
+# Crear ruta de guardado de experimentos
+create_runs_dir()
+
 # Ejecutar algoritmo genético
 NUM_GENERACIONES = 301
 initial_mutation_rate = 0.01
@@ -42,10 +36,10 @@ historic_scores = []
 for i in range(NUM_GENERACIONES):
     generation.set_population_score(image=image)
     generation.set_best_genomes()
-    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=False, save_dir='runs')
+    if i % 25 == 0: generation.represent_best_genome(image=image, show=False, save=True, save_dir='runs')
 
     historic_scores.append(generation.best_scores[0])
-    save_score_plot(epochs=i+1)
+    save_score_plot(epochs=i+1, scores=historic_scores)
     mutation_rate = initial_mutation_rate * (1 - generation.best_scores[0] / max_score)
 
     generation = generation.new_generation(mutation_rate=mutation_rate)
