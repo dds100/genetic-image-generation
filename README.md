@@ -1,6 +1,6 @@
 # Genetic Algorithm for Image Generation
 
-![Example](assets\output.gif)
+![Example](assets/output.gif)
 
 ## About
 **This project has no practical applications at all. Its only purpose was coding for fun and make a first approach to genetic algorithms with Python.**
